@@ -7,6 +7,9 @@ class ProjectsController < ApplicationController
 
   # GET /projects
   # GET /projects.json
+  def projects
+  end
+
   def index
     @projects = Project.all
   end

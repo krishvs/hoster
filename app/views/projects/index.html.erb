@@ -2,32 +2,25 @@
 <div class="page-header">
   <h1><%=t '.title', :default => Project %></h1>
 </div>
+<% user = Octokit.user current_user.username
+   repos = user.rels[:repos].get.data 
+ %>
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>ID</th>
       <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:type) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+      <th>Description</th>
+      <th>Git url</th>
+      <th>Action</th>
     </tr>
   </thead>
   <tbody>
-    <% @projects.each do |project| %>
+    <% repos.each do |repo| %>
       <tr>
-        <td><%= project.id %></td>
-        <td><%= project.name %></td>
-        <td><%= project.type %></td>
-        <td><%=l project.created_at, format: :long %></td>
-        <td>
-          <%= link_to project_path(project), :class => 'btn btn-xs', :title => "#{ t('.show', :default => t('helpers.links.show')) }" do %>
-            <%= glyph 'info-sign' %>
-            <%= glyph 'pencil' %>
-          <%- end -%>
-          <%= link_to project_path(project), :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-xs', :title => "#{ t('.destroy', :default => t('helpers.links.destroy')) }" do %>
-            <%= glyph 'remove' %>
-          <%- end -%>
-        </td>
+        <td><%= repo.name %></td>
+        <td><%= repo.description%></td>
+        <td><%= repo.rels[:html].href%></td>
+        <td><button class="btn btn-primary">Create Stack</button></td>
       </tr>
     <% end %>
   </tbody>
