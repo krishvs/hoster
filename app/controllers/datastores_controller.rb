@@ -29,6 +29,7 @@ class DatastoresController < ApplicationController
   # POST /datastores.json
   def create
     @datastore = Datastore.new(datastore_params)
+    @datastore.user = current_user
 
     respond_to do |format|
       if @datastore.save
