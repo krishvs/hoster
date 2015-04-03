@@ -1,0 +1,33 @@
+<h1>Listing datastores</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Version</th>
+      <th>Url</th>
+      <th>User</th>
+      <th>Project</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @datastores.each do |datastore| %>
+      <tr>
+        <td><%= datastore.type %></td>
+        <td><%= datastore.version %></td>
+        <td><%= datastore.url %></td>
+        <td><%= datastore.user %></td>
+        <td><%= datastore.project %></td>
+        <td><%= link_to 'Show', datastore %></td>
+        <td><%= link_to 'Edit', edit_datastore_path(datastore) %></td>
+        <td><%= link_to 'Destroy', datastore, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Datastore', new_datastore_path %>

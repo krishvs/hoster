@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @datastore.type %>
+</p>
+
+<p>
+  <strong>Version:</strong>
+  <%= @datastore.version %>
+</p>
+
+<p>
+  <strong>Url:</strong>
+  <%= @datastore.url %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @datastore.user %>
+</p>
+
+<p>
+  <strong>Project:</strong>
+  <%= @datastore.project %>
+</p>
+
+<%= link_to 'Edit', edit_datastore_path(@datastore) %> |
+<%= link_to 'Back', datastores_path %>
