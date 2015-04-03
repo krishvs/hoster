@@ -1,33 +1,40 @@
-<h1>Listing datastores</h1>
-
-<table>
+<%- model_class = Datastore -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => Datastore %></h1>
+</div>
+<table class="table table-striped">
   <thead>
     <tr>
-      <th>Type</th>
-      <th>Version</th>
-      <th>Url</th>
-      <th>User</th>
-      <th>Project</th>
-      <th colspan="3"></th>
+      <th>ID</th>
+      <th><%= model_class.human_attribute_name(:type) %></th>
+      <th><%= model_class.human_attribute_name(:version) %></th>
+      <th><%= model_class.human_attribute_name(:url) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
-
   <tbody>
     <% @datastores.each do |datastore| %>
       <tr>
+        <td><%= datastore.id %></td>
         <td><%= datastore.type %></td>
         <td><%= datastore.version %></td>
         <td><%= datastore.url %></td>
-        <td><%= datastore.user %></td>
-        <td><%= datastore.project %></td>
-        <td><%= link_to 'Show', datastore %></td>
-        <td><%= link_to 'Edit', edit_datastore_path(datastore) %></td>
-        <td><%= link_to 'Destroy', datastore, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%=l datastore.created_at, format: :long %></td>
+        <td>
+          <%= link_to datastore_path(datastore), :class => 'btn btn-xs', :title => "#{ t('.show', :default => t('helpers.links.show')) }" do %>
+            <%= glyph 'info-sign' %>
+            <%= glyph 'pencil' %>
+          <%- end -%>
+          <%= link_to datastore_path(datastore), :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-xs', :title => "#{ t('.destroy', :default => t('helpers.links.destroy')) }" do %>
+            <%= glyph 'remove' %>
+          <%- end -%>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<br>
-
-<%= link_to 'New Datastore', new_datastore_path %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_datastore_path,
+            :class => 'btn btn-primary' %>

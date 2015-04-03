@@ -1,6 +1,5 @@
-<h1>Editing datastore</h1>
-
-<%= render 'form' %>
-
-<%= link_to 'Show', @datastore %> |
-<%= link_to 'Back', datastores_path %>
+<%- model_class = Datastore -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => [:'helpers.titles.edit', 'Edit %{model}'], :model => Datastore %></h1>
+</div>
+<%= render :partial => 'form' %>
