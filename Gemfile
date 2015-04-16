@@ -9,7 +9,7 @@ gem 'omniauth'
 gem 'omniauth-github'
 gem "octokit"
 gem 'kaminari'
-gem 'devise_invitable', '~> 1.3.4'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
