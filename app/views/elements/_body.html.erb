@@ -1,0 +1,35 @@
+<div id="page-content-wrapper">
+	<div class="row top-bar body-row">
+		<div class="col-xs-12 top-bar-container" >
+			<div id="projects_back_link" class="col-xs-2">
+				<span><i class="fa fa-angle-left"></i></span>
+				<span>Apps</span> 
+			</div>
+			<div class="col-xs-10">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<div id="waiting-spinner" class="spinner">
+						  <div class="rect1"></div>
+						  <div class="rect2"></div>
+						  <div class="rect3"></div>
+						  <div class="rect4"></div>
+						  <div class="rect5"></div>
+						</div>
+					</div>
+					<div class="col-xs-6 col-xs-offset-3">
+						<div id="project_heading" class="hidden">
+							<span id="project_heading_text"></span><span id="project_external-link"><i class="fa fa-external-link"></i></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+	</div>
+    <div class="row body-row">
+        <div class="col-md-12" id="pjax-container">
+            <%= yield %>
+        </div>
+    </div>
+</div>

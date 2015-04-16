@@ -4,6 +4,7 @@ class ProjectsController < ApplicationController
   before_filter :require_user_signed_in, only: [:new, :edit, :create, :update, :destroy]
 
   before_action :set_project, only: [:show, :edit, :update, :destroy]
+  layout "project"
 
   # GET /projects
   # GET /projects.json
@@ -12,11 +13,17 @@ class ProjectsController < ApplicationController
 
   def index
     @projects = Project.all
+    if request.headers['X-PJAX']
+      render :layout => false
+    end
   end
 
   # GET /projects/1
   # GET /projects/1.json
   def show
+    if request.headers['X-PJAX']
+      render :layout => false
+    end
   end
 
   # GET /projects/new
@@ -31,16 +38,38 @@ class ProjectsController < ApplicationController
   # POST /projects
   # POST /projects.json
   def create
-    @project = Project.new(project_params)
-    @project.user = current_user
+    @project = current_user.projects.find_by_name(params[:project][:name])
+    Rails.logger.debug "The value of the project is #{@project.nil?} #{params[:project][:name]}"
+    if @project.nil?
+      @project = Project.new(project_params)
+      Rails.logger.debug "The value of the project_params is #{project_params}"
+      @project.user = current_user
 
-    respond_to do |format|
-      if @project.save
-        format.html { redirect_to @project, notice: 'Project was successfully created.' }
-        format.json { render :show, status: :created, location: @project }
-      else
-        format.html { render :new }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
+      respond_to do |format|
+        if @project.save
+          if request.xhr?
+            format.json { 
+                render json: {:message => @project.id.to_s}
+            } 
+          else
+            format.html { redirect_to @project, notice: 'Project was successfully created.' }
+            format.json { render :show, status: :created, location: @project }
+          end
+        else
+          format.json { render json: @project.errors, status: :unprocessable_entity }
+          format.html { render :new }
+        end
+      end
+    else
+      respond_to do |format|
+        if request.xhr?
+          format.json { 
+              render json: {:message => @project.id.to_s}
+          } 
+        else
+          format.html { redirect_to @project, notice: 'Project was successfully created.' }
+          format.json { render :show, status: :created, location: @project }
+        end
       end
     end
   end
@@ -77,6 +106,6 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:name, :type, :user_id)
+      params.require(:project).permit(:name, :status, :user_id)
     end
 end

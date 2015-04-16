@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hoster</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <%= csrf_meta_tags %>
+<meta name="viewport" content="width=device-width, initial-scale=1"/></head>
+<body>
+<%= bootstrap_flash %>
+
+<div id="wrapper">
+		<%= render partial: "elements/sidebar" %>
+		<%= render partial: "elements/body" %>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$(document).bind('pjax:beforeSend',function(event){
+			$('#waiting-spinner').removeClass('hidden');
+	        $('#project_heading').addClass('hidden');
+		})
+		$(document).on('click','.create-stack',function(event){
+		  console.log('There is a click event');
+	      var clicked_element = $(event.target);
+	      if($(event.target).is('span')){
+	        clicked_element = clicked_element.parent();
+	      }
+	      console.log('The vakue of the event_tagetnis ',event.target);
+	      var repo_element_id = clicked_element.attr('data-stack');
+	      console.log('The value of the repo nam is ',repo_element_id);
+	      var repo_name = $('#'+repo_element_id).text();
+	      console.log('The vlaueof hte repo name is ',repo_name);
+	      $.ajax({
+	        url: '<%=projects_path%>',
+	        type: 'post',
+	        dataType : 'json',
+	        data: {
+	          'project':{
+	            'name': repo_name,
+	            'user_id': "<%=current_user.id%>",
+	            'status': '0'
+	          }
+	        },
+	        success: function(data){
+	          console.log('The stack has been created for the project ',data);
+	          $.pjax({url: "/projects/"+data["message"], container: '#pjax-container',timeout: 4000})
+
+	        },
+	        error: function(data){
+	          console.log('There was an error in creating the stack for the project');
+	        }
+	      });
+	    });
+		$(document).on('click','#projects_back_link',function(){
+			$.pjax({url: "<%=projects_path%>", container: '#pjax-container',timeout: 4000});
+		})
+	})
+</script>
+</body>
+</html>

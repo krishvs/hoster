@@ -1,31 +1,53 @@
 <%- model_class = Project -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => Project %></h1>
+<div class="col-xs-12" style="padding: 5%;">
+  <div class="list-group col-md-8 " id="github_project_list">
+  </div>
+  <div class="col-md-4">
+    <div class="col-xs-12">
+      <h4> Dashboard </h4>
+    </div>  
+    <div class="col-xs-12 well">
+      <p>This is a list of all your public repositories</p>
+      <p>Click on repository to configure and deploy</p>
+    </div>
+  </div>
 </div>
-<% user = Octokit.user current_user.username
-   repos = user.rels[:repos].get.data 
- %>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:name) %></th>
-      <th>Description</th>
-      <th>Git url</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% repos.each do |repo| %>
-      <tr>
-        <td><%= repo.name %></td>
-        <td><%= repo.description%></td>
-        <td><%= repo.rels[:html].href%></td>
-        <td><button class="btn btn-primary">Create Stack</button></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_project_path,
-            :class => 'btn btn-primary' %>
+
+
+<script type="text/javascript">
+  $(function(){
+    $.ajax({
+      url: "https://api.github.com/users/<%=current_user.username%>/repos",
+      success: function(data){
+        var project_list = $('#github_project_list');
+        $('#waiting-spinner').addClass('hidden');
+        $('#project_heading_text').text('Your Apps');
+        $('#project_heading').removeClass('hidden');
+        for(var i=0;i<data.length;i++){
+          var list_element = createProjectList(data[i]);
+          project_list.append(list_element);
+        }
+      },
+      error: function(data){
+        console.log('there was an error ',error);
+      }
+    })
+    function createProjectList(data){
+      var list_element = $('<a></a>');
+      list_element.addClass('list-group-item create-stack cursor');
+      list_element.attr('data-stack',data.name.replace(/\./g,'_')+'_stack');
+      var span_element = $('<span></span>');
+      var span_logo = $('<span></span>');
+      span_element.addClass('span-element');
+      var logo = $('<i class="fa fa-cubes fa-2x"></i>&nbsp;');
+      span_logo.prepend(logo);
+      span_element.attr('id',data.name.replace(/\./g,'_')+'_stack');
+      span_element.text(data.name);
+      list_element.append(span_logo);
+      list_element.append(span_element);
+      return list_element;
+    }
+  })
+</script>
+

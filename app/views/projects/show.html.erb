@@ -1,26 +1,103 @@
 <%- model_class = Project -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => Project %></h1>
+<div role="tabpanel" class="col-md-10 col-md-offset-1" id="show-tabpanel">
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-pills nav-justified" role="tablist" id="show-tab">
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-sliders fa-2x"></i> Resources</a></li>
+    <li role="presentation"><a href="#deploy" aria-controls="deploy" role="tab" data-toggle="tab"><i class="fa fa-cloud-upload fa-2x"></i> Deploy</a></li>
+    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"><i class="fa fa-gears fa-2x"></i> Settings</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content" id="tab-panel-holder">
+    <div role="tabpanel" class="tab-pane active" id="home">
+       <div class="row">
+        <div class="col-md-12 heading-div">
+         <h5>Data Stores</h5>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <%= render partial: "datastore" %>
+          </div>
+        </div>
+        <div class="col-md-12 heading-div">
+         <h5>Dynos</h5>
+        </div>
+        <div class="col-md-12 thumbnail-holder-divs">
+         <div class="col-xs-12 ">
+          <div class="col-xs-6">
+            <h5>
+              Select the required Datastores for the app and then start a container
+            </h5>
+          </div>
+          <div class="col-xs-6">
+            <a class="btn btn-primary">Start Container</a>
+          </div>
+         </div>
+        </div>
+       </div> 
+
+    </div>
+    <div role="tabpanel" class="tab-pane" id="deploy">
+      <p>To deploy create a container for your application</p>
+      <p>The app type is automatically inferred</p>
+      <p>Link the required data store addons for the required container</p>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="messages">
+      <div class="col-xs-12 setting-project-div add-border">
+        <div class="col-xs-4">
+          <h5>Name</h5>
+        </div>
+        <div class="col-xs-6">
+          <input type="text" class="form-control" value="<%= @project.name %>" disabled="disabled">
+        </div>
+      </div>
+      <div class="col-xs-12 setting-project-div add-border">
+        <div class="col-xs-4">
+          <h5>Status</h5>
+        </div>
+        <div class="col-xs-6">
+          <input type="text" class="form-control" value="<%= @project.status %>" disabled="disabled">
+        </div>
+      </div>
+      <div class="col-xs-12 setting-project-div ">
+        <div class="col-xs-4">
+          <h5>Delete Project</h5>
+        </div>
+        <div class="col-xs-6">
+          <%= link_to t('.destroy', :default => "Delete app..."),
+                      project_path(@project),
+                      :method => 'delete',
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-danger' %>
+        </div>
+      </div>
+
+        <div class="form-group">
+          <%= link_to t('.back', :default => t("helpers.links.back")),
+                      projects_path, :class => 'btn btn-default'  %>
+          
+        </div>
+
+    </div>
+  </div>
+
 </div>
 
-<div class="fieldset">
-  <dl>
-      <dt class="label label-default"><%= model_class.human_attribute_name(:name) %></dt>
-      <dd><pre class="prettyprint"><%= @project.name %></pre></dd>
-      <dt class="label label-default"><%= model_class.human_attribute_name(:type) %></dt>
-      <dd><pre class="prettyprint"><%= @project.type %></pre></dd>
-  </dl>
-</div>
 
-<div class="form-group">
-  <%= link_to t('.back', :default => t("helpers.links.back")),
-              projects_path, :class => 'btn btn-default'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_project_path(@project), :class => 'btn btn-default' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              project_path(@project),
-              :method => 'delete',
-              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-              :class => 'btn btn-danger' %>
-</div>
+<script type="text/javascript">
+  $(function(){
+    $('#waiting-spinner').addClass('hidden');
+    $('#project_heading_text').text('<%=@project.name%>');
+    $('#project_heading').removeClass('hidden');
+    $('.data-store-thumbnails').click(function(){
+      var target_radio = $(this).attr('data-radio-target');
+      if($("#"+target_radio).is(':checked')){
+        $("#"+target_radio).prop("checked", false);
+      }else{
+        $("#"+target_radio).prop("checked", true);
+      }
+    });
+  })
+</script>
 
