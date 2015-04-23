@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  get 'landings/index'
+
+  # config/routes.rb
+  get "/pages/*id" => 'pages#show', as: :page, format: false
+
+  # if routing the root path, update for your controller
+  root to: 'pages#show', id: 'landing', format: false
 
   resources :datastores
 
@@ -14,7 +19,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'landings#index'
+
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

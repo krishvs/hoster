@@ -6,6 +6,10 @@ class ApplicationController < ActionController::Base
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_filter :set_cache_buster
 
+  def after_sign_in_path_for(resource)
+    request.env['omniauth.origin'] || stored_location_for(resource) || projects_path
+  end
+
   def set_cache_buster
     Rails.logger.debug "Setting no cache"
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"

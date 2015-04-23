@@ -9,7 +9,7 @@ gem 'omniauth'
 gem 'omniauth-github'
 gem "octokit"
 gem 'kaminari'
-
+gem 'high_voltage', '~> 2.2.1'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
